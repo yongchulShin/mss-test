@@ -3,7 +3,7 @@ package com.musinsa.service;
 import com.musinsa.domain.Brand;
 import com.musinsa.domain.Category;
 import com.musinsa.domain.Product;
-import com.musinsa.exception.ApiException;
+import com.musinsa.common.exception.ApiException;
 import com.musinsa.repository.BrandRepository;
 import com.musinsa.repository.CategoryRepository;
 import com.musinsa.repository.ProductRepository;
@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -83,5 +84,48 @@ public class ProductService {
         result.put("총액", String.format("%,d", minTotal));
     
         return Map.of("최저가", result);
+    }
+
+    public Map<String, Object> getMinMaxByCategory(String categoryName) {
+        // 카테고리 조회
+        Category cat = categoryRepo.findAll().stream()
+                .filter(c -> c.getName().equals(categoryName))
+                .findFirst()
+                .orElseThrow(() -> new ApiException("카테고리 없음"));
+
+        List<Product> products = productRepo.findByCategory(cat);
+        if (products.isEmpty()) throw new ApiException("해당 카테고리 상품 없음");
+
+        // 최저/최고가 계산
+        int min = products.stream().mapToInt(Product::getPrice).min().orElseThrow();
+        int max = products.stream().mapToInt(Product::getPrice).max().orElseThrow();
+
+        // 순서 보장 위해 LinkedHashMap 사용
+        List<Map<String, Object>> minList = products.stream()
+                .filter(p -> p.getPrice() == min)
+                .map(p -> {
+                    LinkedHashMap<String, Object> m = new LinkedHashMap<>();
+                    m.put("브랜드", p.getBrand().getName());
+                    m.put("가격", String.format("%,d", p.getPrice()));
+                    return m;
+                })
+                .collect(Collectors.toList());
+
+        List<Map<String, Object>> maxList = products.stream()
+                .filter(p -> p.getPrice() == max)
+                .map(p -> {
+                    LinkedHashMap<String, Object> m = new LinkedHashMap<>();
+                    m.put("브랜드", p.getBrand().getName());
+                    m.put("가격", String.format("%,d", p.getPrice()));
+                    return m;
+                })
+                .collect(Collectors.toList());
+
+        LinkedHashMap<String, Object> result = new LinkedHashMap<>();
+        result.put("카테고리", cat.getName());
+        result.put("최저가", minList);
+        result.put("최고가", maxList);
+
+        return result;
     }
 } 

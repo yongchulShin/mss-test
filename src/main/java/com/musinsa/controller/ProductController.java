@@ -1,14 +1,9 @@
 package com.musinsa.controller;
 
-import com.musinsa.dto.*;
 import com.musinsa.service.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.Map;
-import java.util.List;
-import java.util.Optional;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+
 
 @RestController
 @RequestMapping("/api/v1")
@@ -28,6 +23,13 @@ public class ProductController {
     @GetMapping("/summary/brand-lowest")
     public ResponseEntity<?> getLowestBrandForAllCategories() {
         return ResponseEntity.ok(productService.getLowestBrandForAllCategories());
+    }
+
+    // 3. 카테고리 이름으로 최저/최고가 브랜드/상품 가격 조회
+    @GetMapping("/summary/category/{categoryName}")
+    public ResponseEntity<?> getMinMaxByCategory(@PathVariable String categoryName) {
+        System.out.println(categoryName);
+        return ResponseEntity.ok(productService.getMinMaxByCategory(categoryName));
     }
 
 }

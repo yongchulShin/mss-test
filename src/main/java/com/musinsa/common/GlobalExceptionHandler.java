@@ -1,6 +1,6 @@
 package com.musinsa.common;
 
-import com.musinsa.exception.ApiException;
+import com.musinsa.common.exception.ApiException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

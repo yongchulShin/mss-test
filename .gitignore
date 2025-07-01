@@ -1,0 +1,40 @@
+# Java
+*.class
+*.jar
+*.war
+*.ear
+
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# IntelliJ
+.idea/
+*.iml
+out/
+
+# Eclipse
+*.classpath
+*.project
+*.settings/
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Environment
+.env
+
+# H2 DB
+*.mv.db
+*.h2.db
+
+# Test
+/test/
