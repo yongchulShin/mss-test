@@ -76,6 +76,11 @@ java -jar build/libs/mss-test-0.0.1-SNAPSHOT.jar
 - **URL**: http://localhost:8080/swagger-ui.html
 - **API Docs**: http://localhost:8080/api-docs
 
+### 7. Spring Boot Actuator
+- **Health Check**: http://localhost:8080/actuator/health
+- **Info**: http://localhost:8080/actuator/info
+- **Metrics**: http://localhost:8080/actuator/metrics
+
 #### Swagger 응답 예시 설정법
 ```java
 @ApiResponses(value = {
@@ -112,7 +117,7 @@ java -jar build/libs/mss-test-0.0.1-SNAPSHOT.jar
 })
 ```
 
-### 7. API 테스트
+### 8. API 테스트
 ```bash
 # 카테고리별 최저가 조회
 curl -X GET http://localhost:8080/product/summary/lowest
@@ -216,10 +221,32 @@ private void validateBrandCategoryConstraint(Brand brand, Category category) {
 - **API 엔드포인트 테스트**: 브랜드 생성→조회→수정→삭제 전체 플로우 검증
 - **실제 DB 연동**: H2 인메모리 DB와의 실제 연동 테스트
 
-### 5. 향후 개선 방향
+### 5. Docker 실행
+```bash
+# Docker 이미지 빌드
+docker build -t musinsa-backend .
+
+# Docker 컨테이너 실행
+docker run -p 8080:8080 musinsa-backend
+
+# Docker Compose 실행 (docker-compose.yml이 있는 경우)
+docker-compose up -d
+```
+
+### 6. 로깅
+- **로그 파일**: `logs/musinsa.log`
+- **로그 레벨**: INFO (개발 환경: DEBUG)
+- **로그 포맷**: `yyyy-MM-dd HH:mm:ss.SSS [thread] LEVEL logger - message`
+- **로그 롤링**: 일별, 10MB 단위, 30일 보관
+
+### 7. 모니터링
+- **Health Check**: Actuator를 통한 애플리케이션 상태 모니터링
+- **Metrics**: JVM, HTTP 요청 등 다양한 메트릭 수집
+
+### 8. 향후 개선 방향
 
 - **캐싱**: Redis를 활용한 성능 최적화
-- **로깅**: 구조화된 로깅 시스템 구축
-- **모니터링**: 애플리케이션 성능 모니터링 도구 연동
+- **모니터링**: Grafana를 통한 대시보드 구축
 - **보안**: Spring Security를 통한 인증/인가 구현
 - **API 버전 관리**: API 버전별 관리 체계 구축
+- **CI/CD**: GitHub Actions를 통한 자동 배포 파이프라인 구축

@@ -27,6 +27,9 @@ dependencies {
 	// Swagger/OpenAPI
 	implementation 'org.springdoc:springdoc-openapi-ui:1.6.15'
 	implementation 'org.springdoc:springdoc-openapi-webmvc-core:1.6.15'
+	
+	// Spring Boot Actuator
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 }
 
 tasks.named('test') {
