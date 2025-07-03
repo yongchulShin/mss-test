@@ -243,10 +243,21 @@ docker-compose up -d
 - **Health Check**: Actuator를 통한 애플리케이션 상태 모니터링
 - **Metrics**: JVM, HTTP 요청 등 다양한 메트릭 수집
 
-### 8. 향후 개선 방향
+### 8. Frontend 실행
+```bash
+# Frontend 의존성 설치
+cd frontend
+npm install
+
+# Frontend 개발 서버 실행
+npm start
+```
+
+### 9. 향후 개선 방향
 
 - **캐싱**: Redis를 활용한 성능 최적화
 - **모니터링**: Grafana를 통한 대시보드 구축
 - **보안**: Spring Security를 통한 인증/인가 구현
 - **API 버전 관리**: API 버전별 관리 체계 구축
 - **CI/CD**: GitHub Actions를 통한 자동 배포 파이프라인 구축
+- **Frontend 개선**: 차트 라이브러리 추가, 실시간 업데이트
