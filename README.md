@@ -261,3 +261,46 @@ npm start
 - **API 버전 관리**: API 버전별 관리 체계 구축
 - **CI/CD**: GitHub Actions를 통한 자동 배포 파이프라인 구축
 - **Frontend 개선**: 차트 라이브러리 추가, 실시간 업데이트
+
+## CORS 설정 (프론트엔드와 통신)
+
+Spring Boot 백엔드에서 프론트엔드(React 등)와 통신하기 위해 CORS(Cross-Origin Resource Sharing) 설정이 필요합니다.
+
+### 예시: 전체 도메인 허용 (개발용)
+```java
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+@Configuration
+public class WebConfig {
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("http://localhost:3000") // 프론트엔드 주소
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                        .allowedHeaders("*")
+                        .allowCredentials(true);
+            }
+        };
+    }
+}
+```
+
+> 운영 환경에서는 `allowedOrigins`에 실제 프론트엔드 도메인만 허용하세요.
+
+---
+
+## Frontend 구조
+
+- frontend는 **대시보드(Dashboard)**와 **상품분석(ProductAnalysis)** 페이지로 구성되어 있습니다.
+    - `src/pages/Dashboard.js`: 대시보드 페이지
+    - `src/pages/ProductAnalysis.js`: 상품 분석 페이지
+
+- 자세한 내용은 [Frontend.md](frontend%2FFrontend.md) 참고
+---
+

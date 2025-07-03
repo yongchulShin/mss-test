@@ -9,12 +9,7 @@ Musinsa Backend API를 활용하는 React 기반 프론트엔드 애플리케이
 - 최저가 브랜드 정보
 - 카테고리별 최저가 브랜드 목록
 
-### 2. 브랜드 관리
-- 새로운 브랜드 및 상품 추가
-- 모든 카테고리에 1개씩 상품 등록
-- 실시간 유효성 검증
-
-### 3. 상품 분석
+### 2. 상품 분석
 - 카테고리별 최저/최고가 브랜드 조회
 - 시각적 가격 비교
 
@@ -114,12 +109,3 @@ frontend/
 npm run build
 ```
 - `build/` 폴더의 내용을 웹 서버에 배포
-
-### Docker 배포
-```bash
-# Docker 이미지 빌드
-docker build -t musinsa-frontend .
-
-# 컨테이너 실행
-docker run -p 3000:80 musinsa-frontend
-``` 
