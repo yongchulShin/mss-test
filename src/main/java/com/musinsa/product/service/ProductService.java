@@ -168,6 +168,18 @@ public class ProductService {
         log.debug("카테고리별 상품 개수 검증 완료");
     }
 
+    // 상품 가격이 모두 양수인지 체크
+    private void checkProductsPricePositive(List<ProductDto> products) {
+        log.debug("상품 가격 검증 시작");
+        for (ProductDto pd : products) {
+            if (pd.getPrice() <= 0) {
+                log.error("잘못된 상품 가격 - 카테고리: {}, 가격: {}", pd.getCategoryName(), pd.getPrice());
+                throw new ApiException("상품 가격은 0보다 커야 합니다.");
+            }
+        }
+        log.debug("상품 가격 검증 완료");
+    }
+
     // 상품 리스트를 받아 브랜드와 함께 저장
     private void saveProductsForBrand(Brand brand, List<ProductDto> products) {
         log.debug("브랜드 {}의 상품 저장 시작 - 상품 개수: {}", brand.getName(), products.size());
@@ -198,6 +210,8 @@ public class ProductService {
         
         // 모든 카테고리에 1개의 상품이 있는지 체크
         checkAllCategoriesHasOneProduct(brandDto.getProducts());
+        // 상품 가격 검증
+        checkProductsPricePositive(brandDto.getProducts());
         
         // 브랜드 생성
         Brand brand = new Brand();
@@ -229,6 +243,8 @@ public class ProductService {
         
         // 모든 카테고리에 1개의 상품이 있는지 체크
         checkAllCategoriesHasOneProduct(brandDto.getProducts());
+        // 상품 가격 검증
+        checkProductsPricePositive(brandDto.getProducts());
         
         // 기존 상품 삭제
         List<Product> oldProducts = productRepo.findByBrand(brand);
