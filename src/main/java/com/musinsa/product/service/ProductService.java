@@ -145,9 +145,20 @@ public class ProductService {
         return result;
     }
 
-    // 모든 카테고리에 1개의 상품이 있는지 체크
+    // 모든 상품의 가격이 양수인지 검증
+    private void validateProductPrices(List<ProductDto> products) {
+        for (ProductDto pd : products) {
+            if (pd.getPrice() <= 0) {
+                log.error("가격이 0 이하인 상품 발견 - 카테고리: {}, 가격: {}", pd.getCategoryName(), pd.getPrice());
+                throw new ApiException("상품 가격은 0보다 커야 합니다.");
+            }
+        }
+    }
+
+    // 모든 카테고리에 1개의 상품이 있는지 체크 및 가격 검증
     private void checkAllCategoriesHasOneProduct(List<ProductDto> products) {
         log.debug("카테고리별 상품 개수 검증 시작");
+        validateProductPrices(products);
         List<Category> allCategories = categoryRepo.findAll();
         List<String> productCategories = products.stream()
                 .map(ProductDto::getCategoryName)
@@ -183,6 +194,8 @@ public class ProductService {
     // 상품 리스트를 받아 브랜드와 함께 저장
     private void saveProductsForBrand(Brand brand, List<ProductDto> products) {
         log.debug("브랜드 {}의 상품 저장 시작 - 상품 개수: {}", brand.getName(), products.size());
+        // 가격 검증 - 사전 검증 메서드를 신뢰하지만 재확인 차원에서 호출
+        validateProductPrices(products);
         List<Category> allCategories = categoryRepo.findAll();
         for (ProductDto pd : products) {
             Category cat = allCategories.stream()
