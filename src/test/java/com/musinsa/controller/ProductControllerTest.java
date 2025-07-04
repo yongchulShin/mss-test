@@ -113,6 +113,7 @@ class ProductControllerTest {
                 new ProductDto("모자", 1700),
                 new ProductDto("양말", 1800),
                 new ProductDto("액세서리", 2300)
+        ));
 
 
         mockMvc.perform(post("/brand")
