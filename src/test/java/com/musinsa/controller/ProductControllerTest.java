@@ -100,6 +100,30 @@ class ProductControllerTest {
     }
 
     @Test
+    @DisplayName("브랜드 및 상품 추가 실패 - 상품 가격 0 이하")
+    void addBrandWithProductsPriceFail() throws Exception {
+        BrandDto brandDto = new BrandDto();
+        brandDto.setName("PriceFail");
+        brandDto.setProducts(List.of(
+                new ProductDto("상의", -1000),
+                new ProductDto("아우터", 6000),
+                new ProductDto("바지", 4000),
+                new ProductDto("스니커즈", 9000),
+                new ProductDto("가방", 2000),
+                new ProductDto("모자", 1700),
+                new ProductDto("양말", 1800),
+                new ProductDto("액세서리", 2300)
+        ));
+
+        mockMvc.perform(post("/brand")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(brandDto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.success").value(false))
+                .andExpect(jsonPath("$.message").exists());
+    }
+
+    @Test
     @DisplayName("브랜드 및 상품 수정 성공")
     void updateBrandWithProducts() throws Exception {
         // 먼저 브랜드를 생성
