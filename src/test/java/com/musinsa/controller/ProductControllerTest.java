@@ -100,6 +100,30 @@ class ProductControllerTest {
     }
 
     @Test
+    @DisplayName("브랜드 및 상품 추가 실패 - 음수 가격 포함")
+    void addBrandWithNegativePrice() throws Exception {
+        BrandDto brandDto = new BrandDto();
+        brandDto.setName("NEG");
+        brandDto.setProducts(List.of(
+                new ProductDto("상의", -1000),
+                new ProductDto("아우터", 8000),
+                new ProductDto("바지", 7000),
+                new ProductDto("스니커즈", 6000),
+                new ProductDto("가방", 5000),
+                new ProductDto("모자", 4000),
+                new ProductDto("양말", 3000),
+                new ProductDto("액세서리", 2000)
+        ));
+
+        mockMvc.perform(post("/brand")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(brandDto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.success").value(false))
+                .andExpect(jsonPath("$.message").exists());
+    }
+
+    @Test
     @DisplayName("브랜드 및 상품 수정 성공")
     void updateBrandWithProducts() throws Exception {
         // 먼저 브랜드를 생성
